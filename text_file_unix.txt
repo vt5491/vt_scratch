@@ -1,3 +1,6 @@
 This file was created
 on unix.
 It has 0a rules.
+
+this line added with emacs windows.
+this line too.
