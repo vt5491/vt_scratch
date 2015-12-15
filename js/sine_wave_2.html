@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width"/>
+	<title>oscillator.js</title>
+	<style>
+	body {
+	  -webkit-user-select: none;
+	}
+	</style>
+</head>
+<body>
+
+  <!-- <button onmousedown="play(440)" onmouseup="stop()" ontouchstart="play(440)" ontouchend="stop()">440</button> -->
+  <button onmousedown="exitLeapLoop=false;play(440)"  ontouchstart="play(440)" ontouchend="stop()">440</button>
+  <button onmousedown="play(880)" onmouseup="stop()" ontouchstart="play(880)" ontouchend="stop()">880</button>
+  <br>
+  <input placeholder="gimme a number"><button 
+    onmousedown="play(this.previousSibling.value)" onmouseup="stop()"
+    ontouchstart="play(this.previousSibling.value)" ontouchend="stop()">you try</button>
+  <br>
+  <button onmousedown="cmajor.yo()" onmouseup="cmajor.no()" ontouchstart="cmajor.yo(440)" ontouchend="cmajor.no()">C major chord</button>
+  <!-- <button onmousedown="cmajor.yo()" onmouseup="stop()" ontouchstart="cmajor.yo(440)" ontouchend="stop()">C major chord</button> -->
+  <br/><br/>
+  <button onmousedown="exitLeapLoop= true;stop()">Stop Notes</button>
+  <pre id="log"></pre>
+  <script src="https://js.leapmotion.com/leap-0.6.4.js"></script> 
+  <script>
+
+      var audio_context, oscillator;
+      //vt add
+      var exitLeapLoop = false;
+      //vt end
+
+      function stop() {
+          //vtoscillator.noteOff(0);
+          oscillator.stop(0);
+          fire('stop');
+      }
+
+      function play(freq) {
+          oscillator = audio_context.createOscillator();
+          oscillator.frequency.value = freq;
+          oscillator.connect(audio_context.destination);
+          //vtoscillator.noteOn(0);
+          oscillator.start(0);
+          fire('play', oscillator.frequency.value);
+          //vt add
+          // Leap.loop uses browser's requestAnimationFrame
+          var options = { enableGestures: true };
+
+          //var controller = Leap.loop(options, function(frame) {
+          Leap.loop(options, function(frame) {
+            //console.log('frame.hands.length=', frame.hands.length);
+            if (frame.hands.length > 0) {
+
+                var newFreq = Math.abs(frame._translation[2] * 50);
+
+                console.log('newFreq=' + newFreq);
+                oscillator.frequency.value = newFreq;
+            }
+
+            if (exitLeapLoop) {
+                console.log('now exiting Leap Loop');
+                //return;
+                //controller.disconnect();
+                exit();
+                
+            };
+          });
+          console.log('now at end of play');
+          //vt end
+      }
+
+      var cmajor = {};
+      cmajor.yo = function () {
+          var oscs = [], o, i, freqs = [261.63, 329.63, 392];
+          freqs.forEach(function (freq) {
+              o = audio_context.createOscillator();
+              o.frequency.value = freq;
+              o.connect(audio_context.destination);
+              //vto.noteOn(0);
+              o.start(0);
+              oscs.push(o);
+          });
+          this.oscs = oscs;
+          fire('play', '\n - ' + freqs.join('Hz\n - '));
+      };
+
+      cmajor.no = function () {
+          this.oscs.forEach(function (o) {
+              //vto.noteOff(0);
+              o.stop(0);
+          });
+          fire('stop');
+      };
+
+      function fire(e, data) {
+          if (e === 'stop') {
+              log.innerHTML = '';
+          }
+          if (e === 'play') {
+              log.innerHTML = "Playing " + data + 'Hz';
+          }
+      }
+
+      (function init(g) {
+          try {
+              audio_context = new (g.AudioContext || g.webkitAudioContext);
+              oscillator = audio_context.createOscillator();
+          } catch (e) {
+              alert('No web audio oscillator support in this browser');
+          }
+      }(window));
+  </script>
+
+
+<p><a href="/webaudio-oscillator-in-js">blog post</a>
+</body>
+</html>
