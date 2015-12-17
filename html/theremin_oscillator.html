@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width"/>
+	<title>theremin_oscillator.js</title>
+	<style>
+	body {
+	  -webkit-user-select: none;
+	}
+	</style>
+</head>
+<body>
+  <!-- <button onmousedown="play(440)" onmouseup="stop()" ontouchstart="play(440)" ontouchend="stop()">440</button> -->
+  <button onmousedown="exitLeapLoop=false;play(440)"  ontouchstart="play(440)" ontouchend="stop()">440</button>
+  <button onmousedown="play(880)" onmouseup="stop()" ontouchstart="play(880)" ontouchend="stop()">880</button>
+  <br>
+  <input placeholder="gimme a number"><button 
+    onmousedown="play(this.previousSibling.value)" onmouseup="stop()"
+    ontouchstart="play(this.previousSibling.value)" ontouchend="stop()">you try</button>
+  <br>
+  <button onmousedown="cmajor.yo()" onmouseup="cmajor.no()" ontouchstart="cmajor.yo(440)" ontouchend="cmajor.no()">C major chord</button>
+  <!-- <button onmousedown="cmajor.yo()" onmouseup="stop()" ontouchstart="cmajor.yo(440)" ontouchend="stop()">C major chord</button> -->
+  <br/><br/>
+  <button onmousedown="exitLeapLoop= true;stop()">Stop Notes</button>
+  <pre id="log"></pre>
+  <script src="https://js.leapmotion.com/leap-0.6.4.js"></script> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="../js/theremin.js"></script>
+
+<p><a href="/webaudio-oscillator-in-js">blog post</a>
+  <form id="main_form">
+    <p>
+    <label>Wave Type</label>
+    <select id="wave_type_select">
+        <option value="square">Square</option>
+        <option value="sine">Sine</option>
+    </select>
+    <br/>
+    <input type="checkbox" name="add_5th" value="add_5th" id="cb_add_5th"> add 5th 
+    <br>
+    <input type="checkbox" name="add_major_3rd" value="add_major_3rd" id="cb_add_major_3rd"> add Major 3rd 
+    <p></p>
+    <!-- <button onmousedown="start()"  onmouseup="    7">start</button>-->
+    <button id="b_start" >start</button>
+    <br/><br/>
+    <!-- <button onmousedown="stop();">stop</button>      -->
+    <button" id="b_stop">stop</button>      
+    <br/>
+    <button id="dummy">dummy</button>
+  </form>
+  </body>
+</html>
