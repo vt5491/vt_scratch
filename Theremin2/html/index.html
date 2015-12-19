@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/Theremin.js"></script>
+    <script src="../bower_components/sprintf/dist/sprintf.min.js"></script>
+</head>
+<body>
+    <div id="div_baseFreq">hello from div_baseFreq</div>
+    <p>
+        <label>Wave Type</label>
+        <select id="wave_type_select">
+            <option value="square">Square</option>
+            <option value="sine">Sine</option>
+        </select>
+        <br />
+        <input type="checkbox" name="add_5th" value="add_5th" id="cb_add_5th"> add 5th
+        <br>
+        <input type="checkbox" name="add_major_3rd" value="add_major_3rd" id="cb_add_major_3rd"> add Major 3rd
+    <p></p>
+    <button id="b_start">start</button>
+    <br /><br />
+    <button id="b_stop"> stop</button>
+    <br />
+
+</body>
+</html>
