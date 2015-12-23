@@ -3,35 +3,9 @@
 
 function Theremin() {
 
-  //factory.ctrlFrameHandler = function (frame) {
+  var MAX_FREQ = 2500;
 
-//  var ctrlFrameHandler2 = function (frame, baseFreq, oscs) {
-  //var ctrlFrameHandler = function (frame) {
-  //  if (frame.hands.length > 0) {
-  //    var hand = frame.hands[0];
-  //    var handPos = hand.palmPosition[2] / 2.0;
-  //    //var newFreq = Math.abs(handPos * 75);
-  //    var newFreq = Math.abs(handPos * 50);
-
-  //    window.theremin_global_baseFreq = newFreq;
-
-  //    //console.log('newFreq=' + newFreq);
-  //    //$("#div_baseFreq").html('baseFreq: ' + window.theremin_global_baseFreq.toFixed(0));
-  //    //$("#div_baseFreq").html('baseFreq: ' + sprintf('% 4d', window.theremin_global_baseFreq));
-  //    //$("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", window.theremin_global_baseFreq));
-  //    $("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", this.baseFreq));
-
-  //    window.theremin_global_oscs.forEach(function (o) {
-  //      o.oscillator.frequency.value = window.theremin_global_baseFreq * o.multiplier;
-  //    })
-  //  }
-  //  else {
-  //    // turn it off
-  //    window.theremin_global_oscs.forEach(function (o) {
-  //      o.oscillator.frequency.value = 0;
-  //    })
-  //  }
-  //};
+  //var LISTENER = FrameListener();
 
   var factory = function () {
   };
@@ -39,83 +13,77 @@ function Theremin() {
   // this returns a closure via a factory method.  We need a closure because
   // we need to bring in 'oscs' and 'baseFreq' from our context into the runtime
   // context of the LeapMotion.
-  factory.ctrlFrameHandler2 = function (frame) {
-    //var oscs_local = window.theremin_global_oscs;
-    //var baseFreq_local = window.theremin_global_baseFreq;
+  factory.ctrlFrameHandler = function (frame) {
     var oscs_local = this.oscs;
     var baseFreq_local = this.baseFreq;
+    var invertFreq_local = this.invertFreq;
 
     var ctrlFrameHandler = function (frame) {
       if (frame.hands.length > 0) {
         var hand = frame.hands[0];
-        var handPos = hand.palmPosition[2] / 2.0;
+        var handPos = hand.palmPosition[2] / 3.0;
         //var newFreq = Math.abs(handPos * 75);
-        var newFreq = Math.abs(handPos * 50);
+        //var newFreq = Math.abs(handPos * 50);
+        //console.log("ctrlFrameHandler: MAX_FREQ=", MAX_FREQ);
+        console.log("ctrlFrameHandler: invertFreq_local=", invertFreq_local);
+        var newFreq;
+
+        if (invertFreq_local) {
+          newFreq = MAX_FREQ - Math.abs(handPos * 50);
+
+          if (newFreq < 0) {
+            newFreq = 0;
+          }
+        }
+        else {
+          newFreq = Math.abs(handPos * 50);
+        }
 
         baseFreq_local = newFreq;
 
-        //console.log('newFreq=' + newFreq);
-        //$("#div_baseFreq").html('baseFreq: ' + window.theremin_global_baseFreq.toFixed(0));
-        //$("#div_baseFreq").html('baseFreq: ' + sprintf('% 4d', window.theremin_global_baseFreq));
-        //$("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", window.theremin_global_baseFreq));
         $("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", baseFreq_local));
 
         oscs_local.forEach(function (o) {
-          //o.oscillator.frequency.value = window.theremin_global_baseFreq * o.multiplier;
           o.oscillator.frequency.value = baseFreq_local * o.multiplier;
         })
       }
       else {
         // turn it off
-        //console.log('oscs_local=', oscs_local);
         oscs_local.forEach(function (o) {
           o.oscillator.frequency.value = 0;
         })
       }
     };
 
-    //ctrlFrameHandler(frame);
     return ctrlFrameHandler;
   }
-    //var factory = {};
-    //var factory = new Object();
-
-  //new Leap.Controller({ enableGestures: true, });
-  //factory.ctrlFrameHa    if ($this.is(':checked')) {
-        // the checkbox was checked 
-    //} else {
-    //    // the checkbox was unchecked
-    //}ndler = function (frame) {
-  //  ctrlFrameHandler2(frame, this.baseFreq, this.oscs);
-  //}; //.bind(this);
 
   factory.init = function () {
-  //var factory = function () {
     console.log('now in init function');
     // oscs is an array of hashes.  The hash has two keys: 'multiplier' and 'oscillator'.
     // 'multiplier' is the value the root freq. is multiplied by to get the new tone e.g a 'fifth'
     // oscillator is the osciallator object.
-    window.vtAbc = 7;
-    //this.oscs = [];
-    //window.theremin_global_oscs = [];
-    //this.leapController;
     this.waveType = 'square';
     //this.waveType = 'sine';
-    this.exitLeapLoop = false;
+    //this.exitLeapLoop = false;
     this.baseFreq = 440;
-    //window.theremin_global_baseFreq = 440;
 
     this.leapController = new Leap.Controller({ enableGestures: true, });
 
     this.audio_context = new window.AudioContext();
-    //this.osc = this.createOscillator(1.0, this.baseFreq);
 
-    //oscs.push({ multiplier: 1.0, oscillator: oscillator });
-    //this.oscs.push(this.osc);
-    //window.theremin_global_oscs.push(this.osc);
+    this.invertFreq = false;
+
+    //this.listener = FrameListener();
+
+    //this.listener.on_frame()
+    this.oscs = [];
+    this.baseFreq = 440;
+
+    var osc1 = this.createOscillator(1.0, this.baseFreq);
+    this.oscs.push(osc1);
   };
 
-  //factory.prototype.start = function () {
   factory.createOscillator = function(multiplier, freq) {
     try {
       console.log('createOscillator: waveType=', this.waveType);
@@ -124,7 +92,6 @@ function Theremin() {
       osc.type = this.waveType;
       osc.frequency.value = (freq * multiplier) || 440;
       osc.connect(this.audio_context.destination);
-      //osc.start(0);
     }
     catch (e) {
       alert('No web audio oscillator support in this browser');
@@ -181,8 +148,6 @@ function Theremin() {
     var oscIndex = this.getOscillatorIndex(multiplier);
 
     if (oscIndex) {
-      //delete this.oscs[oscIndex];
-      //this.oscs.splice[oscIndex, 1];
       this.oscs[oscIndex].oscillator.stop();
       this.oscs = this.oscs.filter(function (item) { return item.multiplier !== multiplier; });
 
@@ -202,64 +167,56 @@ function Theremin() {
     })
   };
 
-  factory.start = function () {
-    //this.stop();
-    console.log('theremin.start: now in start');
-    console.log('theremin.start: waveType=', this.waveType);
-    //console.log('theremin.start: oscs=', this.oscs);
-    //console.log('theremin.start: window.theremin_global_oscs=', window.theremin_global_oscs);
-    //console.log('theremin.start: window.vtAbc=', window.vtAbc);
-     
-    // we have to initialize a new bunch of oscillators each time
-    //window.theremin_global_oscs = [];
-    //window.theremin_global_baseFreq = 440;
-    this.oscs = [];
-    this.baseFreq = 440;
-    //$("#div_baseFreq").hide();
-    console.log('div_baseFreq.innerHTML=' + $("#div_baseFreq").html());
-    $("#div_baseFreq").html( 'baseFreq: ' + window.theremin_global_baseFreq);
-    var osc1 = this.createOscillator(1.0, window.theremin_global_baseFreq);
-    //window.theremin_global_oscs.push(osc1);
-    this.oscs.push(osc1);
-
-    //// major 3rd 
-    //var osc2 = this.createOscillator(1.3333, window.theremin_global_baseFreq);
-    //window.theremin_global_oscs.push(osc2);
-
-    //// fifth
-    //var osc2 = this.createOscillator(1.5, window.theremin_global_baseFreq);
-    //window.theremin_global_oscs.push(osc2);
-
-    //window.theremin_global_oscs.forEach(function (o) {
-    this.oscs.forEach(function (o) {
-      o.oscillator.start(0);
-    })
-    
-    this.bindController();
-    // Leap.loop uses browser's requestAnimationFrame
-    //var options = { enableGestures: true };
-
-    //console.log('now at end of play');
-  };
-
   factory.bindController = function () {
     console.log('bindController: now connecting to leapController');
     this.leapController.connect();
 
-    //this.leapController.on('frame', this.ctrlFrameHandler);
-    this.leapController.on('frame', this.ctrlFrameHandler2());
+    this.frameCallback = this.ctrlFrameHandler();
+    //this.leapController.on('frame', this.ctrlFrameHandler());
+    if (this.leapController.listeners('frame').length === 0) {
+      this.leapController.on('frame', this.frameCallback);
+    }
   };
 
-  //factory.prototype.stop = function () {
-  factory.stop = function () {
-    console.log('theremin: now in stop');
-    this.leapController.disconnect()
-    this.leapController.removeListener('frame', this.ctrlFrameHandler2);
+  factory.start = function () {
+    console.log('theremin.start: now in start');
+    console.log('theremin.start: waveType=', this.waveType);
 
-    //window.theremin_global_oscs.forEach(function (o) {
-    this.oscs.forEach(function (o) {
-      o.oscillator.stop();
-    })
+    //this.oscs = [];
+    //this.baseFreq = 440;
+    console.log('div_baseFreq.innerHTML=' + $("#div_baseFreq").html());
+    $("#div_baseFreq").html( 'baseFreq: ' + window.theremin_global_baseFreq);
+    //var osc1 = this.createOscillator(1.0, window.theremin_global_baseFreq);
+    //var osc1 = this.createOscillator(1.0, this.baseFreq);
+    //this.oscs.push(osc1);
+
+    //this.oscs.forEach(function (o) {
+    for(var i = 0; i < this.oscs.length; i++) {
+      var o = this.oscs[i].oscillator;
+      var osc1 = this.createOscillator(this.oscs[i].multiplier, o.frequency || this.baseFreq);
+      //this.oscs.push(osc1);
+      // overlay the original
+      this.oscs[i] = osc1;
+
+      this.oscs[i].oscillator.start();
+    }
+    
+    this.bindController();
+  };
+
+  factory.stop = function () {
+    console.log('theremin: now in stop 2');
+    this.leapController.disconnect()
+    //this.leapController.removeListener('frame', factory.ctrlFrameHandler);
+    //this.leapController.removeListener('frame', this.ctrlFrameHandler);
+    this.leapController.removeListener('frame', this.leapController.listeners('frame')[0]);
+    //this.leapController.removeListener('frame', this.frameCallback);
+    //this.leapController.removeAllListeners();
+
+    //this.oscs.forEach(function (o) {
+    for(var i = 0; i < this.oscs.length; i++) {
+      this.oscs[i].oscillator.stop();
+    }
   };
 
   return factory;

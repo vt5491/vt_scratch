@@ -11,14 +11,16 @@
     <script src="../bower_components/sprintf/dist/sprintf.min.js"></script>
 </head>
 <body>
-    <div id="div_baseFreq">hello from div_baseFreq</div>
+    <div id="div_baseFreq"></div>
     <p>
+        <input type="checkbox" name="invert_freq" value="invert_freq" id="invert_freq"> Invert Frequency Orientation
+        <p>
         <label>Wave Type</label>
         <select id="wave_type_select">
             <option value="square">Square</option>
             <option value="sine">Sine</option>
         </select>
-        <br />
+        <p>
         <input type="checkbox" name="add_major_3rd" value="add_major_3rd" id="cb_add_major_3rd"> add Major 3rd
         <br/>
         <input type="checkbox" name="add_5th" value="add_5th" id="cb_add_5th"> add 5th
@@ -26,9 +28,7 @@
         <input type="checkbox" name="add_octave" value="add_octave" id="cb_add_octave"> add Ocatve
     <p></p>
     <button id="b_start">start</button>
-    <br /><br />
     <button id="b_stop"> stop</button>
-    <br />
-
+    <br /><br />
 </body>
 </html>
