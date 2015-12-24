@@ -1,0 +1,39 @@
+<div class="container" id="div_theremin" ng-controller="MainCtrl as main">
+    <div id="div_baseFreq"></div>
+    <p>
+    <p></p>
+    <input type="checkbox" id="invert_freq"
+           ng-init="checked=false"
+           ng-model="invert_freq_checked"
+           ng-click="invertFreq(invert_freq_checked)"> Invert Frequency Orientation
+    <p>
+        <label>Wave Type</label>
+        <select id="wave_type_select"
+                ng-model="wave_type"
+                ng-change="setWaveType(wave_type)">
+            <option value="square" selected>Square</option>
+            <option value="sine">Sine</option>
+        </select>
+    <p>
+        <input type='checkbox' id="cb_add_major_3rd"
+               ng-init="checked=false"
+               ng-model="add_major_3rd_checked"
+               ng-click="addOvertone(add_major_3rd_checked, {{ 4.0 / 3.0}})">add Major 3rd
+        <br />
+        <input type='checkbox' id="cb_add_5th"
+               ng-init="checked=false"
+               ng-model="add_5th_checked"
+               ng-click="addOvertone(add_5th_checked, {{ 1.5 }})">add 5th
+        <br />
+        <input type='checkbox' id="cb_add_octave"
+               ng-init="checked=false"
+               ng-model="add_octave_checked"
+               ng-click="addOvertone(add_octave_checked, {{ 2.0 }})">add octave
+        <br />
+    <p></p>
+
+    <button id="b_start" ng-mousedown="start()">start </button>
+    <button id="b_stop" ng-mousedown="stop()">stop </button>
+</div>
+<p></p>
+</div>
