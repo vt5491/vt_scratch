@@ -8,7 +8,9 @@
  * Service in the thereminAngApp.
  */
 angular.module('thereminAngApp')
-  .service('theremin', function () {
+  //.service('theremin', function () {
+  //.service('theremin', ['$scope', function ($scope) {
+  .service('theremin', [ function () {
     // AngularJS will instantiate a singleton by calling "new" on this function
      var MAX_FREQ = 2500;
 
@@ -16,6 +18,7 @@ angular.module('thereminAngApp')
 
      var factory = function () {
      };
+    //var factory = [];
 
     // this returns a closure via a factory method.  We need a closure because
     // we need to bring in 'oscs' and 'baseFreq' from our context into the runtime
@@ -24,6 +27,9 @@ angular.module('thereminAngApp')
        var oscs_local = this.oscs;
        var baseFreq_local = this.baseFreq;
        var invertFreq_local = this.invertFreq;
+       var mapFreq_local = this.mapFreq;
+       var maxFreq_local = this.getMaxFreq();
+       var posSensitivityFactor_local = this.posSensitivityFactor;
 
        var ctrlFrameHandler = function (frame) {
          if (frame.hands.length > 0) {
@@ -43,7 +49,14 @@ angular.module('thereminAngApp')
              }
            }
            else {
-             newFreq = Math.abs(handPos * 50);
+             //newFreq = Math.abs(handPos * 50);
+             // note: this is called by the child context, thus it calls
+             // mapFreq in the child, not in the base module.
+             newFreq = mapFreq_local(handPos, maxFreq_local, posSensitivityFactor_local);
+             // $scope.$broadcast('freqMapEvent', handPos);
+             // $scope.$on('event-response', function (freq) {
+             //   newFreq = freq;
+             // });
            }
 
            baseFreq_local = newFreq;
@@ -90,6 +103,8 @@ angular.module('thereminAngApp')
 
        var osc1 = this.createOscillator(1.0, this.baseFreq);
        this.oscs.push(osc1);
+
+       //this.theremin = 
      };
 
      factory.createOscillator = function(multiplier, freq) {
@@ -256,6 +271,11 @@ angular.module('thereminAngApp')
        }
      };
 
+    // Getters and Setters
+    factory.getMaxFreq = function () {
+      return MAX_FREQ;
+    };
+    
      return factory;
-  }
+  }]
 );

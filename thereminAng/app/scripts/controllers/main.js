@@ -8,31 +8,33 @@
  * Controller of the thereminAngApp
  */
 angular.module('thereminAngApp')
-  .controller('MainCtrl', function ($scope, theremin) {
+//['$rootScope', '$timeout', 'MyService', function($rootScope, $timeout, MyService)
+  //.controller('MainCtrl', function ($scope, thereminApp) {
+  .controller('MainCtrl',['$scope', 'thereminApp', function ($scope, thereminApp) {
     console.log("MainCtrl: entered");
 
-    theremin.init();
+    thereminApp.init();
 
     $scope.start = function () {
-      theremin.start();
+      thereminApp.start();
     }
 
     $scope.stop = function () {
-      theremin.stop();
+      thereminApp.stop();
     }
 
     $scope.addOvertone = function (checked, multiplier) {
-      theremin.addOvertone(checked, multiplier);
+      thereminApp.addOvertone(checked, multiplier);
     }
 
     $scope.setWaveType = function (wave_type) {
-      theremin.setWaveType(wave_type);
+      thereminApp.setWaveType(wave_type);
     }
 
     $scope.invertFreq = function (checked) {
       console.log('MainCtrl.invertFreq: checked=', checked)
-      theremin.invertFreq = checked;
-      theremin.bindController();
-      console.log('MainCtrl.invertFreq: theremin.invertFreq=', theremin.invertFreq);
+      thereminApp.invertFreq = checked;
+      thereminApp.bindController();
+      console.log('MainCtrl.invertFreq: thereminApp.invertFreq=', thereminApp.invertFreq);
     }
-  });
+  }]);

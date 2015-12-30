@@ -15,4 +15,19 @@ describe('Service: utils', function () {
     expect(!!utils).toBe(true);
   });
 
+  it('mapFreqToTone maps a frequencey to the proper tone', function () {
+    var result = utils.mapFreqToTone();
+    expect(result).toEqual(7);
+  });
+
+  it('normalizeFreqToChromatic maps a frequencey to the proper tone', function () {
+    var result = utils.normalizeFreqToChromatic();
+    expect(result).toEqual(7);
+  });
+
+  it('getOctave maps a frequencey to the proper tone', function () {
+    expect(utils.getOctave(440.0)).toEqual(3);
+    expect(utils.getOctave(500.0)).toEqual(3);
+    expect(utils.getOctave(20.0)).toEqual(0);
+  });
 });
