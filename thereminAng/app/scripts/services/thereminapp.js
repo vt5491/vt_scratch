@@ -8,7 +8,7 @@
  * Service in the thereminAngApp.
  */
 angular.module('thereminAngApp')
-  .service('thereminApp', function (standardTheremin) {
+  .factory('thereminApp', [ 'standardTheremin', 'chromaticTheremin', function (standardTheremin, chromaticTheremin) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     var constr = [];
@@ -17,23 +17,23 @@ angular.module('thereminAngApp')
     constr.start = function () {
      console.log('thereminApp.start: now in start');
 
-      standardTheremin.start();
+      chromaticTheremin.start();
       
     };     
 
     constr.stop = function () {
      console.log('thereminApp.stop: now in stop');
 
-      standardTheremin.stop();
+      chromaticTheremin.stop();
       
     };     
 
     constr.init = function () {
      console.log('thereminApp.init: now in init');
 
-      standardTheremin.init();
+      chromaticTheremin.init();
       
     };     
     
     return constr;
-  });
+  }]);

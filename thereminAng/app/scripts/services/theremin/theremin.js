@@ -10,7 +10,8 @@
 angular.module('thereminAngApp')
   //.service('theremin', function () {
   //.service('theremin', ['$scope', function ($scope) {
-  .service('theremin', [ function () {
+  //.service('theremin', [ function () {
+  .factory('theremin', [ function () {
     // AngularJS will instantiate a singleton by calling "new" on this function
      var MAX_FREQ = 2500;
 
@@ -22,14 +23,15 @@ angular.module('thereminAngApp')
 
     // this returns a closure via a factory method.  We need a closure because
     // we need to bring in 'oscs' and 'baseFreq' from our context into the runtime
-    // context of the LeapMotion.
+    //context of the LeapMotion.
      factory.ctrlFrameHandler = function (frame) {
-       var oscs_local = this.oscs;
-       var baseFreq_local = this.baseFreq;
-       var invertFreq_local = this.invertFreq;
-       var mapFreq_local = this.mapFreq;
-       var maxFreq_local = this.getMaxFreq();
-       var posSensitivityFactor_local = this.posSensitivityFactor;
+       var theremin_local = this;
+       //var theremin_local.oscs = this.oscs;
+       // var theremin_local.baseFreq = this.baseFreq;
+       // var theremin_local.invertFreq = this.invertFreq;
+       //var mapFreq_local = this.mapFreq;
+       //var maxFreq_local = this.getMaxFreq();
+       //var posSensitivityFactor_local = this.posSensitivityFactor;
 
        var ctrlFrameHandler = function (frame) {
          if (frame.hands.length > 0) {
@@ -38,10 +40,12 @@ angular.module('thereminAngApp')
            //var newFreq = Math.abs(handPos * 75);
            //var newFreq = Math.abs(handPos * 50);
            //console.log("ctrlFrameHandler: MAX_FREQ=", MAX_FREQ);
-           console.log("ctrlFrameHandler: invertFreq_local=", invertFreq_local);
+           //console.log("ctrlFrameHandler: theremin_local.invertFreq=", theremin_local.invertFreq);
+           //console.log("ctrlFrameHandler: theremin_local.invertFreq=", theremin_local.invertFreq);
            var newFreq;
 
-           if (invertFreq_local) {
+           //if (theremin_local.invertFreq) {
+           if (theremin_local.invertFreq) {
              newFreq = MAX_FREQ - Math.abs(handPos * 50);
 
              if (newFreq < 0) {
@@ -52,32 +56,35 @@ angular.module('thereminAngApp')
              //newFreq = Math.abs(handPos * 50);
              // note: this is called by the child context, thus it calls
              // mapFreq in the child, not in the base module.
-             newFreq = mapFreq_local(handPos, maxFreq_local, posSensitivityFactor_local);
+             //newFreq = mapFreq_local(handPos, maxFreq_local, posSensitivityFactor_local);
+             newFreq = theremin_local.mapFreq(handPos, theremin_local.getMaxFreq(), theremin_local.posSensitivityFactor);
+             //console.log('ctrlFrameHandler: newFreq=', newFreq);
              // $scope.$broadcast('freqMapEvent', handPos);
              // $scope.$on('event-response', function (freq) {
              //   newFreq = freq;
              // });
            }
 
-           baseFreq_local = newFreq;
+           //theremin_local.baseFreq = newFreq;
+           theremin_local.baseFreq = newFreq;
 
-           //vt$("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", baseFreq_local));
-           document.getElementById('div_baseFreq').innerHTML = 'baseFreq: ' + sprintf("%4d", baseFreq_local);
+           //vt$("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", theremin_local.baseFreq));
+           document.getElementById('div_baseFreq').innerHTML = 'baseFreq: ' + sprintf("%4d", theremin_local.baseFreq);
 
-           oscs_local.forEach(function (o) {
-             o.oscillator.frequency.value = baseFreq_local * o.multiplier;
-           })
+           theremin_local.oscs.forEach(function (o) {
+             o.oscillator.frequency.value = theremin_local.baseFreq * o.multiplier;
+           });
          }
          else {
            // turn it off
-           oscs_local.forEach(function (o) {
+           theremin_local.oscs.forEach(function (o) {
              o.oscillator.frequency.value = 0;
-           })
+           });
          }
        };
 
        return ctrlFrameHandler;
-     }
+     };
 
      factory.init = function () {
        console.log('now in init function');

@@ -17,24 +17,24 @@ angular.module('thereminAngApp')
 
     $scope.start = function () {
       thereminApp.start();
-    }
+    };
 
     $scope.stop = function () {
       thereminApp.stop();
-    }
+    };
 
     $scope.addOvertone = function (checked, multiplier) {
       thereminApp.addOvertone(checked, multiplier);
-    }
+    };
 
     $scope.setWaveType = function (wave_type) {
       thereminApp.setWaveType(wave_type);
-    }
+    };
 
     $scope.invertFreq = function (checked) {
       console.log('MainCtrl.invertFreq: checked=', checked)
       thereminApp.invertFreq = checked;
       thereminApp.bindController();
       console.log('MainCtrl.invertFreq: thereminApp.invertFreq=', thereminApp.invertFreq);
-    }
+    };
   }]);

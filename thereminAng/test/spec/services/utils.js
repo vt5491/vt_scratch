@@ -21,8 +21,8 @@ describe('Service: utils', function () {
   });
 
   it('normalizeFreqToChromatic maps a frequencey to the proper tone', function () {
-    var result = utils.normalizeFreqToChromatic();
-    expect(result).toEqual(7);
+    var result = utils.normalizeFreqToChromatic(500);
+    expect(result).toEqual(494);
   });
 
   it('getOctave maps a frequencey to the proper tone', function () {

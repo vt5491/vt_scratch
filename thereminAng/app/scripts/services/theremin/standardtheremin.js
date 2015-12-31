@@ -9,7 +9,7 @@
  */
 angular.module('thereminAngApp')
   //.controller('MainCtrl',['$scope', 'thereminApp', function ($scope, thereminApp) {
-  .service('standardTheremin', [ 'theremin', function ( theremin) {
+  .factory('standardTheremin', [ 'theremin', function ( theremin) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     //var ChildService = Object.create(BaseService);
@@ -28,7 +28,7 @@ angular.module('thereminAngApp')
     //constr.prototype.mapFreq = function (pos) {
       //console.log('theremin.MAX_FREQ=', theremin.getMaxFreq());
       //console.log('standardTheremin.mapFreq: this.MAX_FREQ=', this.getMaxFreq());
-      console.log('standardTheremin.mapFreq: this.MAX_FREQ=', maxFreq);
+      //console.log('standardTheremin.mapFreq: this.MAX_FREQ=', maxFreq);
 
       var freq;
 

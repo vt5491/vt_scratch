@@ -15,10 +15,11 @@ describe('Service: standardTheremin', function () {
   var mockTheremin, standardTheremin;
   
   beforeEach(function(){
-    console.log('beforeEach: now in first beforeEach');
+    //console.log('beforeEach: now in first beforeEach');
     module(function($provide){
       $provide.service('theremin', function(){
         this.getMaxFreq = function () { return 2500;};
+        this.posSensitivityFactor = 50;
         //this.abc = function () { return 7;};
       });
     });
@@ -30,7 +31,7 @@ describe('Service: standardTheremin', function () {
   // });
   
   beforeEach(inject(function(_theremin_, _standardTheremin_){
-    console.log('now in beforeEach 3');
+    //console.log('now in beforeEach 3');
     //console.log('beforeEach: _standardTheremin_=', _standardTheremin_);
     mockTheremin = _theremin_;
     standardTheremin = _standardTheremin_;
@@ -50,7 +51,9 @@ describe('Service: standardTheremin', function () {
   it('mapFreq works properly', function () {
     //console.log('ut: standardTheremin=', standardTheremin);
     //console.log('ut: standardTheremin.theremin.abc()=', standardTheremin.theremin);
-    expect(standardTheremin.mapFreq(10)).toEqual(2000);
+    //(handPos, theremin_local.getMaxFreq()
+    //handPos, theremin_local.getMaxFreq(), theremin_local.posSensitivityFactor)
+     expect(standardTheremin.mapFreq(10, standardTheremin.getMaxFreq(), standardTheremin.posSensitivityFactor )).toEqual(2000);
   });
 
 });
