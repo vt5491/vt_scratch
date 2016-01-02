@@ -9,17 +9,6 @@
  */
 angular.module('thereminAngApp')
   .factory('majorTheremin', ['theremin', 'utils', function (theremin, utils){
-    // Service logic
-    // ...
-
-    // var meaningOfLife = 42;
-
-    // // Public API here
-    // return {
-    //   someMethod: function () {
-    //     return meaningOfLife;
-    //   }
-    // };
     var constr = Object.create(theremin);
     
     constr.posSensitivityFactor = 50;

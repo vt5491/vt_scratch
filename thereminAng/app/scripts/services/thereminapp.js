@@ -19,42 +19,27 @@ angular.module('thereminAngApp')
 
     
     constr.start = function () {
-     console.log('thereminApp.start: now in start');
-
       theremin.start();
-      
     };     
 
     constr.stop = function () {
-     console.log('thereminApp.stop: now in stop');
-
       theremin.stop();
-      
     };     
 
     constr.init = function () {
-     console.log('thereminApp.init: now in init');
-
       theremin.init();
     };     
     
     constr.bindController = function () {
-     console.log('thereminApp.bindController: now in bindController');
-
       theremin.bindController();
     };     
     
     constr.setWaveType = function (wave_type) {
-     console.log('thereminApp.setWaveType: now in setWaveType');
-
       theremin.setWaveType(wave_type);
       
     };     
     
     constr.setThereminType = function (theremin_type) {
-      console.log('thereminApp.setThereminType: now in setThereminType');
-
-      //theremin.setThereminType(theremin_type);
       // stop the old theremin
       // TODO: consider using this.stop() and for subsequent calls
       theremin.stop();
@@ -82,10 +67,7 @@ angular.module('thereminAngApp')
     };     
     
     constr.addOvertone = function (checked, multiplier) {
-     console.log('thereminApp.addOvertone: now in addOvertone');
-
       theremin.addOvertone(checked, multiplier);
-      
     };     
     
     constr.invertFreq = function (checked) {

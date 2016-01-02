@@ -8,11 +8,7 @@
  * Controller of the thereminAngApp
  */
 angular.module('thereminAngApp')
-//['$rootScope', '$timeout', 'MyService', function($rootScope, $timeout, MyService)
-  //.controller('MainCtrl', function ($scope, thereminApp) {
   .controller('MainCtrl',['$scope', 'thereminApp', function ($scope, thereminApp) {
-    console.log("MainCtrl: entered");
-
     thereminApp.init();
 
     $scope.start = function () {
@@ -36,9 +32,7 @@ angular.module('thereminAngApp')
     };
 
     $scope.invertFreq = function (checked) {
-      console.log('MainCtrl.invertFreq: checked=', checked)
       thereminApp.invertFreq = checked;
       thereminApp.bindController();
-      console.log('MainCtrl.invertFreq: thereminApp.invertFreq=', thereminApp.invertFreq);
     };
   }]);

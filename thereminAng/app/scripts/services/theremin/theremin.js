@@ -8,43 +8,24 @@
  * Service in the thereminAngApp.
  */
 angular.module('thereminAngApp')
-  //.service('theremin', function () {
-  //.service('theremin', ['$scope', function ($scope) {
-  //.service('theremin', [ function () {
   .factory('theremin', [ function () {
-    // AngularJS will instantiate a singleton by calling "new" on this function
      var MAX_FREQ = 2500;
-
-  //var LISTENER = FrameListener();
 
      var factory = function () {
      };
-    //var factory = [];
 
     // this returns a closure via a factory method.  We need a closure because
     // we need to bring in 'oscs' and 'baseFreq' from our context into the runtime
     //context of the LeapMotion.
      factory.ctrlFrameHandler = function (frame) {
        var theremin_local = this;
-       //var theremin_local.oscs = this.oscs;
-       // var theremin_local.baseFreq = this.baseFreq;
-       // var theremin_local.invertFreq = this.invertFreq;
-       //var mapFreq_local = this.mapFreq;
-       //var maxFreq_local = this.getMaxFreq();
-       //var posSensitivityFactor_local = this.posSensitivityFactor;
 
        var ctrlFrameHandler = function (frame) {
          if (frame.hands.length > 0) {
            var hand = frame.hands[0];
            var handPos = hand.palmPosition[2] / 3.0;
-           //var newFreq = Math.abs(handPos * 75);
-           //var newFreq = Math.abs(handPos * 50);
-           //console.log("ctrlFrameHandler: MAX_FREQ=", MAX_FREQ);
-           //console.log("ctrlFrameHandler: theremin_local.invertFreq=", theremin_local.invertFreq);
-           //console.log("ctrlFrameHandler: theremin_local.invertFreq=", theremin_local.invertFreq);
            var newFreq;
 
-           //if (theremin_local.invertFreq) {
            if (theremin_local.invertFreq) {
              newFreq = MAX_FREQ - Math.abs(handPos * 50);
 
@@ -53,22 +34,11 @@ angular.module('thereminAngApp')
              }
            }
            else {
-             //newFreq = Math.abs(handPos * 50);
-             // note: this is called by the child context, thus it calls
-             // mapFreq in the child, not in the base module.
-             //newFreq = mapFreq_local(handPos, maxFreq_local, posSensitivityFactor_local);
              newFreq = theremin_local.mapFreq(handPos, theremin_local.getMaxFreq(), theremin_local.posSensitivityFactor);
-             //console.log('ctrlFrameHandler: newFreq=', newFreq);
-             // $scope.$broadcast('freqMapEvent', handPos);
-             // $scope.$on('event-response', function (freq) {
-             //   newFreq = freq;
-             // });
            }
 
-           //theremin_local.baseFreq = newFreq;
            theremin_local.baseFreq = newFreq;
 
-           //vt$("#div_baseFreq").html('baseFreq: ' + sprintf("%4d", theremin_local.baseFreq));
            document.getElementById('div_baseFreq').innerHTML = 'baseFreq: ' + sprintf("%4d", theremin_local.baseFreq);
 
            theremin_local.oscs.forEach(function (o) {
@@ -87,36 +57,23 @@ angular.module('thereminAngApp')
      };
 
      factory.init = function () {
-       console.log('now in init function');
        // oscs is an array of hashes.  The hash has two keys: 'multiplier' and 'oscillator'.
        // 'multiplier' is the value the root freq. is multiplied by to get the new tone e.g a 'fifth'
        // oscillator is the osciallator object.
        this.waveType = 'square';
-       //this.waveType = 'sine';
-       //this.exitLeapLoop = false;
        this.baseFreq = 440;
-
        this.leapController = new Leap.Controller({ enableGestures: true, });
-
        this.audio_context = new window.AudioContext();
-
        this.invertFreq = false;
-
-       //this.listener = FrameListener();
-
-       //this.listener.on_frame()
        this.oscs = [];
        this.baseFreq = 440;
 
        var osc1 = this.createOscillator(1.0, this.baseFreq);
        this.oscs.push(osc1);
-
-       //this.theremin = 
      };
 
      factory.createOscillator = function(multiplier, freq) {
        try {
-         console.log('createOscillator: waveType=', this.waveType);
          var osc = this.audio_context.createOscillator();
 
          osc.type = this.waveType;
@@ -193,34 +150,18 @@ angular.module('thereminAngApp')
 
     // set the wave types on all oscillators
      factory.setWaveType = function (waveType) {
-       console.log('theremin.setWaveType: waveType=', waveType);
        this.waveType = waveType;
 
        this.oscs.forEach(function (o) {
          o.oscillator.type = waveType;
        });
-
-       //this.bindController();
      };
 
-    // set the scale types on all oscillators
-     // factory.setScaleType = function (scaleType) {
-     //   console.log('theremin.setScaleType: scaleType=', scaleType);
-     //   this.scaleType = scaleType;
-
-     //   this.oscs.forEach(function (o) {
-     //     o.oscillator.type = scaleType;
-     //   });
-
-     //   //this.bindController();
-     // };
-    
      factory.bindController = function () {
-       console.log('bindController: now connecting to leapController');
        this.leapController.connect();
 
        this.frameCallback = this.ctrlFrameHandler();
-       //this.leapController.on('frame', this.ctrlFrameHandler());
+
        if (this.leapController.listeners('frame').length === 0) {
          this.leapController.on('frame', this.frameCallback);
        }
@@ -230,7 +171,6 @@ angular.module('thereminAngApp')
 
        var osc;
 
-       console.log('addOvertone: checked=' + checked + ',multiplier=' + multiplier);
        if (checked) {
          // the checkbox was checked 
          if (!this.getOscillator(multiplier)) {
@@ -253,22 +193,9 @@ angular.module('thereminAngApp')
      };
 
      factory.start = function () {
-       console.log('theremin.start: now in start');
-       console.log('theremin.start: waveType=', this.waveType);
-
-       //this.oscs = [];
-       //this.baseFreq = 440;
-       //vtconsole.log('div_baseFreq.innerHTML=' + $("#div_baseFreq").html());
-       //vt$("#div_baseFreq").html( 'baseFreq: ' + window.theremin_global_baseFreq);
-       //var osc1 = this.createOscillator(1.0, window.theremin_global_baseFreq);
-       //var osc1 = this.createOscillator(1.0, this.baseFreq);
-       //this.oscs.push(osc1);
-
-       //this.oscs.forEach(function (o) {
        for(var i = 0; i < this.oscs.length; i++) {
          var o = this.oscs[i].oscillator;
          var osc1 = this.createOscillator(this.oscs[i].multiplier, o.frequency || this.baseFreq);
-         //this.oscs.push(osc1);
          // overlay the original
          this.oscs[i] = osc1;
 
@@ -279,15 +206,8 @@ angular.module('thereminAngApp')
      };
 
      factory.stop = function () {
-       console.log('theremin: now in stop 2');
        this.leapController.disconnect()
-       //this.leapController.removeListener('frame', factory.ctrlFrameHandler);
-       //this.leapController.removeListener('frame', this.ctrlFrameHandler);
        this.leapController.removeListener('frame', this.leapController.listeners('frame')[0]);
-       //this.leapController.removeListener('frame', this.frameCallback);
-       //this.leapController.removeAllListeners();
-
-       //this.oscs.forEach(function (o) {
        for(var i = 0; i < this.oscs.length; i++) {
          this.oscs[i].oscillator.stop();
        }

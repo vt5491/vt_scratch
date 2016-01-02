@@ -86,53 +86,6 @@ angular.module('thereminAngApp')
       return octave; 
     };
     
-    // normalize a frequency to it's nearest frequencey counterpart
-    // in the chromatic scale
-    //TODO: don't have the 55 hz octave range hard-code e.g generalize it
-    //TODO: this probably belongs in chromaticTheremin
-    // -> actually, I think an argument can be made for keeping it in here
-    // constr.normalizeFreqToChromatic = function (freq) {
-    //   //return 7;
-    //   // TODO: determine the octave.  Then normalize all frequencies
-    //   // down to the 55-110 range.  Then find the interval.  Then
-    //   // return ocatave number + relative freq (scaled up by 2x'ing as necessary)
-    //   var nOctave;
-    //   var baseFreq;
-    //   var mappedFreq;
-
-    //   nOctave = this.getOctave(freq);
-    //   //console.log('normalizeFreqToChromatic: nOctave=', nOctave);
-
-    //   // Normalize the frequency to somwhere between 55 and 110
-    //   baseFreq = freq / (Math.pow(2, nOctave));
-    //   //console.log('normalizeFreqToChromatic: baseFreq=', baseFreq);
-
-    //   // Now get it as a relative ratio to 55.0
-    //   var relativeBaseFreq = baseFreq / 55.0;
-    //   //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
-
-    //   // Find the first ratio in the interval that exceeds it
-    //   for( var i=0; i < chromaticInterval.length; i++) {
-    //     if( chromaticInterval[i] > relativeBaseFreq) {
-    //       break;
-    //     }; 
-    //   };
-
-    //   //console.log('normalizeFreqToChromatic: i=', i);
-    //   var relativeBaseFreq = baseFreq / 55.0;
-    //   //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
-
-    //   // The ratio index one below this the one we should map to
-    //   var normalizedFreqMultiple = chromaticInterval[i - 1];
-
-    //   // Unnormalize the matched ratio back to the proper octave range 
-    //   mappedFreq = Math.round(normalizedFreqMultiple * 55.0 * (Math.pow( 2, nOctave)));
-    //   //console.log('normalizeFreqToChromatic: mappedFreq=', mappedFreq);
-
-    //   return mappedFreq;
-      
-    // };
-
     constr.normalizeFreqToChromatic = function (freq) {
       return this.normalizeFreqToIntervalSet(freq, chromaticIntervals);
     };
@@ -146,7 +99,6 @@ angular.module('thereminAngApp')
     };
 
     constr.normalizeFreqToIntervalSet = function (freq, intervalSet) {
-      //return 7;
       // TODO: determine the octave.  Then normalize all frequencies
       // down to the 55-110 range.  Then find the interval.  Then
       // return ocatave number + relative freq (scaled up by 2x'ing as necessary)
@@ -155,15 +107,12 @@ angular.module('thereminAngApp')
       var mappedFreq;
 
       nOctave = this.getOctave(freq);
-      //console.log('normalizeFreqToChromatic: nOctave=', nOctave);
 
       // Normalize the frequency to somwhere between 55 and 110
       baseFreq = freq / (Math.pow(2, nOctave));
-      //console.log('normalizeFreqToChromatic: baseFreq=', baseFreq);
 
       // Now get it as a relative ratio to 55.0
       var relativeBaseFreq = baseFreq / 55.0;
-      //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
 
       // Find the first ratio in the interval that exceeds it
       for( var i=0; i < intervalSet.length; i++) {
@@ -172,16 +121,12 @@ angular.module('thereminAngApp')
         }; 
       };
 
-      //console.log('normalizeFreqToChromatic: i=', i);
       var relativeBaseFreq = baseFreq / 55.0;
-      //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
-
       // The ratio index one below this the one we should map to
       var normalizedFreqMultiple = intervalSet[i - 1];
 
       // Unnormalize the matched ratio back to the proper octave range 
       mappedFreq = Math.round(normalizedFreqMultiple * 55.0 * (Math.pow( 2, nOctave)));
-      //console.log('normalizeFreqToChromatic: mappedFreq=', mappedFreq);
 
       //really weak error checking
       if (isNaN (mappedFreq)){
