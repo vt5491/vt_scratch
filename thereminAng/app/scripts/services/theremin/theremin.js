@@ -193,13 +193,28 @@ angular.module('thereminAngApp')
 
     // set the wave types on all oscillators
      factory.setWaveType = function (waveType) {
+       console.log('theremin.setWaveType: waveType=', waveType);
        this.waveType = waveType;
 
        this.oscs.forEach(function (o) {
          o.oscillator.type = waveType;
-       })
+       });
+
+       //this.bindController();
      };
 
+    // set the scale types on all oscillators
+     // factory.setScaleType = function (scaleType) {
+     //   console.log('theremin.setScaleType: scaleType=', scaleType);
+     //   this.scaleType = scaleType;
+
+     //   this.oscs.forEach(function (o) {
+     //     o.oscillator.type = scaleType;
+     //   });
+
+     //   //this.bindController();
+     // };
+    
      factory.bindController = function () {
        console.log('bindController: now connecting to leapController');
        this.leapController.connect();

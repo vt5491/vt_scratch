@@ -13,7 +13,7 @@ angular.module('thereminAngApp')
 
     var constr = {};
 
-    var chromaticInterval = [];
+    var chromaticIntervals = [];
 // A	440.00	20⁄12	1.000000
 // A♯/B♭	466.16	21⁄12	1.059463
 // B	493.88	22⁄12	1.122462
@@ -27,68 +27,41 @@ angular.module('thereminAngApp')
 // G	783.99	210⁄12	1.781797
 // G♯/A♭	830.61	211⁄12	1.887748
 // A	880.00	212⁄12	2.000000
-    chromaticInterval[0] = 1.000000;
-    chromaticInterval[1] = 1.059463;
-    chromaticInterval[2] = 1.122462;
-    chromaticInterval[3] = 1.189207;
-    chromaticInterval[4] = 1.259921;
-    chromaticInterval[5] = 1.334839;
-    chromaticInterval[6] = 1.414213;
-    chromaticInterval[7] = 1.498307;
-    chromaticInterval[8] = 1.587401;
-    chromaticInterval[9] = 1.681792;
-    chromaticInterval[10] = 1.781797;
-    chromaticInterval[11] = 1.887748;
+    chromaticIntervals[0] = 1.000000;
+    chromaticIntervals[1] = 1.059463;
+    chromaticIntervals[2] = 1.122462;
+    chromaticIntervals[3] = 1.189207;
+    chromaticIntervals[4] = 1.259921;
+    chromaticIntervals[5] = 1.334839;
+    chromaticIntervals[6] = 1.414213;
+    chromaticIntervals[7] = 1.498307;
+    chromaticIntervals[8] = 1.587401;
+    chromaticIntervals[9] = 1.681792;
+    chromaticIntervals[10] = 1.781797;
+    chromaticIntervals[11] = 1.887748;
 
+    var majorIntervals = [];
+
+    majorIntervals[0] = 1.000000;
+    majorIntervals[1] = 1.122462;
+    majorIntervals[2] = 1.189207;
+    majorIntervals[3] = 1.334839;
+    majorIntervals[4] = 1.498307;
+    majorIntervals[5] = 1.587401;
+    majorIntervals[6] = 1.781797;
+    
+    var pentatonicIntervals = [];
+
+    pentatonicIntervals[0] = 1.000000;
+    pentatonicIntervals[1] = 1.189207;
+    pentatonicIntervals[2] = 1.334839;
+    pentatonicIntervals[3] = 1.498307;
+    pentatonicIntervals[4] = 1.781797;
+    
     var octaveZeroBaseFreq = 55;
     
     constr.mapFreqToTone = function () {
       return 7;
-    };
-
-    // normalize a frequency to it's nearest frequencey counterpart
-    // in the chromatic scale
-    //TODO: don't have the 55 hz octave range hard-code e.g generalize it
-    constr.normalizeFreqToChromatic = function (freq) {
-      //return 7;
-      // TODO: determine the octave.  Then normalize all frequencies
-      // down to the 55-110 range.  Then find the interval.  Then
-      // return ocatave number + relative freq (scaled up by 2x'ing as necessary)
-      var nOctave;
-      var baseFreq;
-      var mappedFreq;
-
-      nOctave = this.getOctave(freq);
-      //console.log('normalizeFreqToChromatic: nOctave=', nOctave);
-
-      // Normalize the frequency to somwhere between 55 and 110
-      baseFreq = freq / (Math.pow(2, nOctave));
-      //console.log('normalizeFreqToChromatic: baseFreq=', baseFreq);
-
-      // Now get it as a relative ratio to 55.0
-      var relativeBaseFreq = baseFreq / 55.0;
-      //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
-
-      // Find the first ratio in the interval that exceeds it
-      for( var i=0; i < chromaticInterval.length; i++) {
-        if( chromaticInterval[i] > relativeBaseFreq) {
-          break;
-        }; 
-      };
-
-      //console.log('normalizeFreqToChromatic: i=', i);
-      var relativeBaseFreq = baseFreq / 55.0;
-      //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
-
-      // The ratio index one below this the one we should map to
-      var normalizedFreqMultiple = chromaticInterval[i - 1];
-
-      // Unnormalize the matched ratio back to the proper octave range 
-      mappedFreq = Math.round(normalizedFreqMultiple * 55.0 * (Math.pow( 2, nOctave)));
-      //console.log('normalizeFreqToChromatic: mappedFreq=', mappedFreq);
-
-      return mappedFreq;
-      
     };
 
     // determine what octave range the freq is in, with 55hz being the
@@ -112,6 +85,111 @@ angular.module('thereminAngApp')
 
       return octave; 
     };
+    
+    // normalize a frequency to it's nearest frequencey counterpart
+    // in the chromatic scale
+    //TODO: don't have the 55 hz octave range hard-code e.g generalize it
+    //TODO: this probably belongs in chromaticTheremin
+    // -> actually, I think an argument can be made for keeping it in here
+    // constr.normalizeFreqToChromatic = function (freq) {
+    //   //return 7;
+    //   // TODO: determine the octave.  Then normalize all frequencies
+    //   // down to the 55-110 range.  Then find the interval.  Then
+    //   // return ocatave number + relative freq (scaled up by 2x'ing as necessary)
+    //   var nOctave;
+    //   var baseFreq;
+    //   var mappedFreq;
 
+    //   nOctave = this.getOctave(freq);
+    //   //console.log('normalizeFreqToChromatic: nOctave=', nOctave);
+
+    //   // Normalize the frequency to somwhere between 55 and 110
+    //   baseFreq = freq / (Math.pow(2, nOctave));
+    //   //console.log('normalizeFreqToChromatic: baseFreq=', baseFreq);
+
+    //   // Now get it as a relative ratio to 55.0
+    //   var relativeBaseFreq = baseFreq / 55.0;
+    //   //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
+
+    //   // Find the first ratio in the interval that exceeds it
+    //   for( var i=0; i < chromaticInterval.length; i++) {
+    //     if( chromaticInterval[i] > relativeBaseFreq) {
+    //       break;
+    //     }; 
+    //   };
+
+    //   //console.log('normalizeFreqToChromatic: i=', i);
+    //   var relativeBaseFreq = baseFreq / 55.0;
+    //   //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
+
+    //   // The ratio index one below this the one we should map to
+    //   var normalizedFreqMultiple = chromaticInterval[i - 1];
+
+    //   // Unnormalize the matched ratio back to the proper octave range 
+    //   mappedFreq = Math.round(normalizedFreqMultiple * 55.0 * (Math.pow( 2, nOctave)));
+    //   //console.log('normalizeFreqToChromatic: mappedFreq=', mappedFreq);
+
+    //   return mappedFreq;
+      
+    // };
+
+    constr.normalizeFreqToChromatic = function (freq) {
+      return this.normalizeFreqToIntervalSet(freq, chromaticIntervals);
+    };
+
+    constr.normalizeFreqToMajor = function (freq) {
+      return this.normalizeFreqToIntervalSet(freq, majorIntervals);
+    };
+
+    constr.normalizeFreqToPentatonic = function (freq) {
+      return this.normalizeFreqToIntervalSet(freq, pentatonicIntervals);
+    };
+
+    constr.normalizeFreqToIntervalSet = function (freq, intervalSet) {
+      //return 7;
+      // TODO: determine the octave.  Then normalize all frequencies
+      // down to the 55-110 range.  Then find the interval.  Then
+      // return ocatave number + relative freq (scaled up by 2x'ing as necessary)
+      var nOctave;
+      var baseFreq;
+      var mappedFreq;
+
+      nOctave = this.getOctave(freq);
+      //console.log('normalizeFreqToChromatic: nOctave=', nOctave);
+
+      // Normalize the frequency to somwhere between 55 and 110
+      baseFreq = freq / (Math.pow(2, nOctave));
+      //console.log('normalizeFreqToChromatic: baseFreq=', baseFreq);
+
+      // Now get it as a relative ratio to 55.0
+      var relativeBaseFreq = baseFreq / 55.0;
+      //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
+
+      // Find the first ratio in the interval that exceeds it
+      for( var i=0; i < intervalSet.length; i++) {
+        if( intervalSet[i] > relativeBaseFreq) {
+          break;
+        }; 
+      };
+
+      //console.log('normalizeFreqToChromatic: i=', i);
+      var relativeBaseFreq = baseFreq / 55.0;
+      //console.log('normalizeFreqToChromatic: relativeBaseFreq=', relativeBaseFreq);
+
+      // The ratio index one below this the one we should map to
+      var normalizedFreqMultiple = intervalSet[i - 1];
+
+      // Unnormalize the matched ratio back to the proper octave range 
+      mappedFreq = Math.round(normalizedFreqMultiple * 55.0 * (Math.pow( 2, nOctave)));
+      //console.log('normalizeFreqToChromatic: mappedFreq=', mappedFreq);
+
+      //really weak error checking
+      if (isNaN (mappedFreq)){
+        mappedFreq = 0;
+      };
+
+      return mappedFreq;
+      
+    };
     return constr;
   });

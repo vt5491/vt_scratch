@@ -20,14 +20,24 @@ describe('Service: utils', function () {
     expect(result).toEqual(7);
   });
 
-  it('normalizeFreqToChromatic maps a frequencey to the proper tone', function () {
-    var result = utils.normalizeFreqToChromatic(500);
-    expect(result).toEqual(494);
-  });
 
   it('getOctave maps a frequencey to the proper tone', function () {
     expect(utils.getOctave(440.0)).toEqual(3);
     expect(utils.getOctave(500.0)).toEqual(3);
     expect(utils.getOctave(20.0)).toEqual(0);
+  });
+  
+  it('normalizeFreqToChromatic maps a frequencey to the proper tone', function () {
+    var result = utils.normalizeFreqToChromatic(500);
+    expect(result).toEqual(494);
+  });
+  
+  it('normalizeFreqToMajor maps a frequencey to the proper tone', function () {
+    var result = utils.normalizeFreqToMajor(470);
+    expect(result).toEqual(440);
+
+    //result = utils.normalizeFreqToMajor(525);
+    expect(utils.normalizeFreqToMajor(525)).toEqual(523);
+    //expect(result).toEqual(523.25);
   });
 });

@@ -31,6 +31,10 @@ angular.module('thereminAngApp')
       thereminApp.setWaveType(wave_type);
     };
 
+    $scope.setThereminType = function (theremin_type) {
+      thereminApp.setThereminType(theremin_type);
+    };
+
     $scope.invertFreq = function (checked) {
       console.log('MainCtrl.invertFreq: checked=', checked)
       thereminApp.invertFreq = checked;

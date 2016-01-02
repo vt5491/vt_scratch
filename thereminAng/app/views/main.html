@@ -2,10 +2,16 @@
     <div id="div_baseFreq"></div>
     <p>
     <p></p>
-    <input type="checkbox" id="invert_freq"
-           ng-init="checked=false"
-           ng-model="invert_freq_checked"
-           ng-click="invertFreq(invert_freq_checked)"> Invert Frequency Orientation
+    <p>
+        <label>Theremin Type</label>
+        <select id="theremin_type_select"
+                ng-model="theremin_type"
+                ng-change="setThereminType(theremin_type)">
+            <option value="standard" selected>Standard</option>
+            <option value="chromatic">Chromatic</option>
+            <option value="major">Major</option>
+            <option value="pentatonic">Pentatonic</option>
+        </select>
     <p>
         <label>Wave Type</label>
         <select id="wave_type_select"
@@ -30,6 +36,11 @@
                ng-model="add_octave_checked"
                ng-click="addOvertone(add_octave_checked, {{ 2.0 }})">add octave
         <br />
+        <p></p>
+    <input type="checkbox" id="invert_freq"
+           ng-init="checked=false"
+           ng-model="invert_freq_checked"
+           ng-click="invertFreq(invert_freq_checked)"> Invert Frequency Orientation
     <p></p>
 
     <button id="b_start" ng-mousedown="start()">start </button>
