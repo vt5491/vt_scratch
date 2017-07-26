@@ -68,6 +68,8 @@
       -- preventDefault
       -- onEvent can KeyUp $ \_ -> keyHandler
       onEvent canvas Click $ \_ -> mouseHandler
+
+
       -- onEvent canvas Click $ \_ -> mouseHandler
       -- onEventVt canvas Click $ \_ -> mouseHandler
       -- doIt :: KeyEvent k -> IO [PaddleEvent]
@@ -99,6 +101,7 @@
       -- animate  canvas  0 0
       renderState canvas initialState
       stateRef <- newIORef $ initialState
+      onEvent canvas KeyDown $ \keyData -> movePaddle keyData stateRef
       animate2  canvas stateRef
       writeLog $ show 1
       writeLog "anim: back from animate"
@@ -131,6 +134,7 @@
   -- paddleHeight = 5 -- height of paddle
   paddleHeight = 15 -- height of paddle
   paddleWidth = 150 -- width of paddle
+  paddleVx = 5
   halfWidth = width / 2 -- well, half the width
   halfHeight = height / 2 --also half the height
 
@@ -156,7 +160,8 @@
   gamePicture state = do
     let x1 = paddlePos state -- paddle start position
         x2 = x1 + paddleWidth -- end position of paddle
-    paddle $ Rect x1 0 x2 paddleHeight -- top paddle
+    -- paddle $ Rect x1 300 x2 paddleHeight -- top paddle
+    paddle $ Rect x1 300 x2 320 -- top paddle
     paddle $ Rect x1 (height - paddleHeight) x2 height -- bottom paddle
 
   renderState :: Canvas -> GameState -> IO ()
@@ -205,6 +210,26 @@
   movePaddles :: (Int, Int) -> IORef GameState -> IO ()
   movePaddles (mouseX, mouseY) stateRef = do
     atomicModifyIORef stateRef (\state -> ((state {paddlePos = (fromIntegral mouseX) - (paddleWidth / 2)}), ()))
+
+  -- movePaddle :: Eq k => keyData  -> IORef GameState -> IO ()
+  -- movePaddle ::  keyCode -> IORef GameState -> IO ()
+  movePaddle keyCode stateRef = do
+    -- case fromIntegral keyCode of
+    case keyCode of
+      65 -> do
+        writeLog "A key pressed"
+        -- atomicModifyIORef stateRef (\state -> ((state {paddlePos} = (state {paddlePos}) - 1)))
+        -- let oldPaddlePos = paddlePos
+        atomicModifyIORef stateRef (\state -> ((state {paddlePos = (paddlePos state) - paddleVx}), ()))
+      68 -> do
+        writeLog "d key pressed"
+        atomicModifyIORef stateRef (\state -> ((state {paddlePos = (paddlePos state) + paddleVx}), ()))
+      83 -> do
+        writeLog "s key pressed"
+        atomicModifyIORef stateRef (\state -> ((state {paddlePos = (paddlePos state) + paddleVx}), ()))
+      _ -> do
+        writeLog "key pressedkG"
+    -- atomicModifyIORef stateRef (\state -> state {paddlePos =} )
 
   moveBall :: GameState -> GameState
   moveBall state = state {ballPos = (x + vx, y + vy)} --increment by vx and vy
